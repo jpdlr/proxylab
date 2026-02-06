@@ -1,0 +1,70 @@
+:root {
+  color-scheme: light;
+  font-family: 'Space Grotesk', 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 40px;
+  --space-8: 56px;
+
+  --radius-s: 10px;
+  --radius-m: 16px;
+  --radius-l: 24px;
+
+  --elevation-1: 0 6px 18px rgba(15, 18, 30, 0.08);
+  --elevation-2: 0 14px 35px rgba(15, 18, 30, 0.12);
+
+  --color-bg: #f4f2ee;
+  --color-surface: #ffffff;
+  --color-surface-2: #f0eeea;
+  --color-text: #1c1d22;
+  --color-muted: #5f636c;
+  --color-border: #ded8d2;
+  --color-accent: #2f6b5f;
+  --color-accent-2: #20443c;
+  --color-chip: #e3ebe7;
+  --color-chip-text: #2f6b5f;
+
+  --app-bg-gradient:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), rgba(244, 242, 238, 0.4)),
+    radial-gradient(circle at 20% 20%, rgba(197, 209, 205, 0.4), rgba(244, 242, 238, 0));
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-bg: #141618;
+  --color-surface: #1b1e22;
+  --color-surface-2: #22262b;
+  --color-text: #f3f1ed;
+  --color-muted: #b1b7be;
+  --color-border: #2b2f35;
+  --color-accent: #7cc7b2;
+  --color-accent-2: #b2f0dc;
+  --color-chip: #223731;
+  --color-chip-text: #a8e6d1;
+  --elevation-1: 0 10px 28px rgba(0, 0, 0, 0.35);
+  --elevation-2: 0 24px 40px rgba(0, 0, 0, 0.45);
+  --app-bg-gradient:
+    radial-gradient(circle at top left, rgba(68, 83, 78, 0.35), rgba(20, 22, 24, 0.4)),
+    radial-gradient(circle at 30% 10%, rgba(59, 78, 73, 0.4), rgba(20, 22, 24, 0));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+button {
+  font-family: var(--font-body);
+}
