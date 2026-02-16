@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import Fastify from "fastify";
-import { InMemoryCaptureStore } from "./captureStore.js";
+import { FileCaptureStore, InMemoryCaptureStore, type CaptureStore } from "./captureStore.js";
 import { redactBody, redactHeaders } from "./redaction.js";
 import { createCurlSnippet, createFetchSnippet } from "./snippets.js";
 import type { CaptureRecord, ReplayRequest, ReplaySource } from "./types.js";
@@ -11,7 +11,7 @@ import type { CaptureRecord, ReplayRequest, ReplaySource } from "./types.js";
 type FetchImpl = typeof fetch;
 
 interface BuildServerOptions {
-  captureStore?: InMemoryCaptureStore;
+  captureStore?: CaptureStore;
   fetchImpl?: FetchImpl;
 }
 
@@ -30,6 +30,21 @@ const joinPath = (basePath: string, suffix: string): string => {
     return right;
   }
   return `${left}${right}`;
+};
+
+const getMaxCaptures = (): number => {
+  const value = Number(process.env.PROXYLAB_MAX_CAPTURES ?? 500);
+  return Number.isFinite(value) && value > 0 ? value : 500;
+};
+
+const createDefaultCaptureStore = (): CaptureStore => {
+  if (process.env.NODE_ENV === "test" || process.env.PROXYLAB_PERSISTENCE === "memory") {
+    return new InMemoryCaptureStore(getMaxCaptures());
+  }
+
+  const filePath =
+    process.env.PROXYLAB_STORE_FILE ?? join(process.cwd(), ".proxylab", "captures.json");
+  return new FileCaptureStore(filePath, getMaxCaptures());
 };
 
 const normalizeHeaders = (
@@ -66,7 +81,7 @@ const toRawBody = (body: unknown): string | undefined => {
 };
 
 const withCapture = (
-  store: InMemoryCaptureStore,
+  store: CaptureStore,
   replay: ReplaySource,
   response: {
     statusCode: number;
@@ -169,7 +184,7 @@ const buildReplaySourceFromRequest = (request: {
 
 export const buildServer = (options: BuildServerOptions = {}) => {
   const app = Fastify({ logger: true });
-  const captureStore = options.captureStore ?? new InMemoryCaptureStore();
+  const captureStore = options.captureStore ?? createDefaultCaptureStore();
   const fetchImpl = options.fetchImpl ?? fetch;
 
   app.get("/health", async () => ({

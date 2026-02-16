@@ -9,6 +9,7 @@ Implemented MVP.
 - Reverse proxy endpoint at `/proxy/*` with target URL via `target` query or `x-proxylab-target` header.
 - Request/response capture with timing and status metadata.
 - Header/body redaction for sensitive fields before persistence.
+- File-backed capture persistence (defaults to `.proxylab/captures.json`).
 - Replay API for previously captured requests.
 - Snippet generation (`curl` + `fetch`) from captured traffic.
 - React dashboard with search, method filtering, detail viewer, and replay action.
@@ -32,6 +33,11 @@ npm run dev
 ```
 
 Server runs on `http://localhost:8787` and web runs on Vite (default `http://localhost:5173`).
+
+### Persistence options
+- Default: file-backed captures in `.proxylab/captures.json`.
+- `PROXYLAB_PERSISTENCE=memory`: disable file persistence.
+- `PROXYLAB_STORE_FILE=/absolute/path/captures.json`: override storage location.
 
 ## Capture example
 ```bash
